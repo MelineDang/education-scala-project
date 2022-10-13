@@ -32,16 +32,6 @@ $:~/<WORKDIR> > cd simplewebservice/
 
 ### **Lancement du projet**
 
-Avant de faire les manipulations suivantes, il faut s'assurer que [docker](https://docs.docker.com/get-docker/) soit bien installé.
-Ensuite, mettez vous dans le bon répertoire et lancez la commande `docker-compose up`. Cette commande va lancer l'environnement.
-```
-$:~/> cd <WORKDIR>
-$:~/<WORKDIR> > cd DataEngineerProjet/
-$:~/<WORKDIR> > docker-compose up
-```
-
-> Pour lancer le dashboard, il faut se rendre à l'adresse suivante `http://localhost:8050/`.
-<br>
 
 
 
