@@ -5,18 +5,18 @@ import fr.esiee.simplewebserver.SimpleWebServer
 
 object MyWebServer {
   def main(args: Array[String]): Unit = {
-    val service = new MyWebService
+    //val service = new MyWebService()
 
     SimpleWebServer
       .create()
-      .listenPort(8080)
-      .withService(service)
+      .listenPort(50000)
+      //.withService(service)
       .runForever()
   }
 }
 
-class MyWebService extends SimpleWebService {
-  override def get(request: WebRequest): WebResponse = {
+/*class MyWebService extends SimpleWebService {
+  override def get(request: WebRequest): Unit = {
     WebResponse.createOkWithBody("hello", "text/html")
   }
-}
+}*/

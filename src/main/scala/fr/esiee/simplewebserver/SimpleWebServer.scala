@@ -1,39 +1,51 @@
 package fr.esiee.simplewebserver
 
+//import WebServerMain.dateTimeFormatter
+
 import java.io.{PrintWriter, StringWriter}
 import java.net.ServerSocket
 import java.net.Socket
+import java.time.ZonedDateTime
 import scala.io.Source
 import scala.annotation.tailrec
 import scala.util.Using
 
 object SimpleWebServer {
 
-  def create(): SimpleWebServerBuilder = SimpleWebServerBuilder(port=None , service=None)
+  def create(): SimpleWebServerBuilder = SimpleWebServerBuilder(port = None, service = None)
 
-  case class SimpleWebServerBuilder(port : Option[Int], service : Option[SimpleWebService]) :
-    def listenPort(port:Int): SimpleWebServerBuilder = copy(port=port)
-    def withService(service: SimpleWebService): SimpleWebServerBuilder = copy(service=service)
+  case class SimpleWebServerBuilder(port: Option[Int], service: Option[SimpleWebService]):
+    def listenPort(port: Int): SimpleWebServerBuilder = {
+      copy(port = Some(port))
+    }
+    def withService(service: SimpleWebService): SimpleWebServerBuilder = copy(service = Some(service))
     
 
     def runForever(): Unit = {
 
+      val unwrappedPort: Int = port match {
+        case None => -1
+        case Some(port) => port
+      }
+
+      println(unwrappedPort)
+
       @tailrec
       def recursiveRunForever(): Unit = {
-        Using(server.accept()) { client =>
-          println(">>> Get request from a client")
-          val request = readGetRequestFrom(client)
-          println("")
-          val response = call(requete, service)
-          println(">>> Sending response...")
-          sendResponseFrom(client, response, ZonedDateTime.now())
+
+        Using(ServerSocket(unwrappedPort).accept()) { sock =>
+          val request = readGetRequestFrom(sock)
+          //println(request)
+          //val response = call(requete, service)
+          //println(">>> Sending response...")
+          //sendResponseTo(sock, response, ZonedDateTime.now())
         }.fold(error => println(s">>> client connection failure: ${error.getMessage}"),
           _ => ()
         )
         recursiveRunForever()
       }
 
-      Using(ServerSocket(port).accept()) { server =>
+      Using(ServerSocket(unwrappedPort).accept()) { server =>
         recursiveRunForever()
       }.get
 
@@ -51,7 +63,9 @@ object SimpleWebServer {
       .toList
   }
 
-  def sendResponseFrom(client: Socket, now: ZonedDateTime): Unit = {
+
+
+  /*def sendResponseTo(client: Socket, now: ZonedDateTime): Unit = {
     val printer = new PrintWriter(client.getOutputStream)
 
     printer.print("HTTP/1.1 200 OK\r\n")
@@ -61,6 +75,6 @@ object SimpleWebServer {
     printer.print("<b> Hello</b>")
 
     printer.flush()
-  }
+  }*/
 
 }
