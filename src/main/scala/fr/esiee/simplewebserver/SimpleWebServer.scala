@@ -9,7 +9,7 @@ import java.time.ZonedDateTime
 import scala.io.Source
 import scala.annotation.tailrec
 import scala.util.Using
-import fr.esiee.simplewebserver.WebParameter
+import fr.esiee.simplewebserver.{WebParameter, WebRequest, WebResponse}
 import fr.esiee.simplewebserver.services.SimpleWebService
 
 object SimpleWebServer {
@@ -36,7 +36,7 @@ object SimpleWebServer {
       def recursiveRunForever(): Unit = {
 
         Using(ServerSocket(unwrappedPort).accept()) { sock =>
-          val request = readGetRequestFrom(sock)
+          //val request = readGetRequestFrom(sock)
           //println(request)
           //val response = call(requete, service)
           //println(">>> Sending response...")
@@ -84,18 +84,5 @@ object SimpleWebServer {
     )
   }
 
-
-
-  /*def sendResponseTo(client: Socket, now: ZonedDateTime): Unit = {
-    val printer = new PrintWriter(client.getOutputStream)
-
-    printer.print("HTTP/1.1 200 OK\r\n")
-    printer.print(s"Date: ${dateTimeFormatter.format(now)}\r\n")
-    printer.print("Content-Type: text/html\r\n")
-    printer.print("\r\n")
-    printer.print("<b> Hello</b>")
-
-    printer.flush()
-  }*/
 
 }

@@ -3,9 +3,9 @@ val scala3Version = "3.2.0"
 lazy val root = project
   .in(file("."))
   .settings(
-    name := "A simple webservice in SCALA", // TODO: name your project
+    name := "A simple webservice in SCALA",
     version := "0.1.0-SNAPSHOT",
-    developers := List( // TODO: replace the following developer by your team developers
+    developers := List( //
       Developer(
         id = "flightmodee",
         name = "ABDOUCHE Samy",
@@ -32,5 +32,6 @@ lazy val root = project
     )
     ),
     scalaVersion := scala3Version,
-    libraryDependencies ++= Seq("org.scalameta" %% "munit" % "0.7.29" % Test)
+    libraryDependencies ++= Seq("org.scalameta" %% "munit" % "0.7.29" % Test),
+    libraryDependencies += "com.google.code.gson" % "gson" % "2.9.1"
   )
