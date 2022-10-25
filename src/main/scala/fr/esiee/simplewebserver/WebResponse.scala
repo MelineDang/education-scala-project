@@ -10,9 +10,6 @@ import java.time.format.DateTimeFormatter
 
 class WebResponse {
 
-
-
-
   def sendResponseFrom(client: Socket, now: ZonedDateTime): Unit = {
     val printer = new PrintWriter(client.getOutputStream)
     val dateTimeFormatter: DateTimeFormatter =

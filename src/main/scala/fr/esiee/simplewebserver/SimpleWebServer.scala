@@ -9,6 +9,8 @@ import java.time.ZonedDateTime
 import scala.io.Source
 import scala.annotation.tailrec
 import scala.util.Using
+import fr.esiee.simplewebserver.WebParameter
+import fr.esiee.simplewebserver.services.SimpleWebService
 
 object SimpleWebServer {
 
@@ -50,8 +52,6 @@ object SimpleWebServer {
       }.get
 
     }
-  //case class ImmutableListenPort(port: Int):
-  //  def port(port: Int): ImmutableListenPort = copy(port)
 
 
   def readGetRequestFrom(client: Socket): List[String] = {
@@ -61,6 +61,27 @@ object SimpleWebServer {
       .getLines()
       .takeWhile(_.trim.nonEmpty)
       .toList
+  }
+
+  def parseParameter(parameter: String): WebParameter = {
+    val param = parameter.split('=') // récupération des clés et leur valeur
+    WebParameter(param.head, param.last) // format clé-valeur
+  }
+
+  def getParameters(parameters: Option[String]): Seq[WebParameter] = {
+    parameters
+      .map(_.split('&').map(parseParameter).toSeq) // quand on a plusieurs paramètres
+      .getOrElse(Seq.empty[WebParameter]) // sinon
+  }
+  private def parseLineToWebRequest(line: String): WebRequest = {
+    val request = line.split(' ') // pour récuperer la request
+    val apiRoute = request(1).split('?') // split sur le "?" pour savoir si c'est une recherche
+    WebRequest(
+      requestType = request(0), // type de la requête (GET, POST, PUT, DELETE)
+      route = request(1), // route (user)
+      body = None, // pour POST, json comportant ce que nous voulons POST
+      parameters = getParameters(if (apiRoute.length > 1) apiRoute.lastOption else None) // obtention des paramètres de la requête
+    )
   }
 
 
